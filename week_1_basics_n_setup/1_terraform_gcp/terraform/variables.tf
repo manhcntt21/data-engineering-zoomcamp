@@ -1,14 +1,14 @@
 locals {
-  data_lake_bucket = "dtc_data_lake"
+   data_lake_bucket = "dtc_data_lake"
 }
 
 variable "project" {
-  description = "Your GCP Project ID"
+  description = "savvy-octagon-362900"
 }
 
 variable "region" {
   description = "Region for GCP resources. Choose as per your location: https://cloud.google.com/about/locations"
-  default = "europe-west6"
+  default = "asia-northeast1"
   type = string
 }
 
