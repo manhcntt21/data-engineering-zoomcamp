@@ -5,6 +5,11 @@ RUN pip install pandas sqlalchemy psycopg2 pyarrow
 
 WORKDIR /app
 
-COPY ingest_data.py ingest_data.py
+# COPY ingest_data.py ingest_data.py
 
-ENTRYPOINT ["python", "ingest_data.py"]
+# ENTRYPOINT ["python", "ingest_data.py"]
+
+COPY ingest_data_zone.py ingest_data_zone.py
+COPY taxi+_zone_lookup.csv taxi+_zone_lookup.csv
+
+ENTRYPOINT ["python", "ingest_data_zone.py"]
