@@ -19,8 +19,8 @@ def ingest_callable(user, password, host, port, db, table_name, csv_file, execut
 
     df = next(df_iter)
 
-    df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
-    df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
+    df.pickup_datetime = pd.to_datetime(df.pickup_datetime)
+    df.dropoff_datetime = pd.to_datetime(df.dropoff_datetime)
 
     df.head(n=0).to_sql(name=table_name, con=engine, if_exists='replace')
 
@@ -38,8 +38,8 @@ def ingest_callable(user, password, host, port, db, table_name, csv_file, execut
             print("completed")
             break
 
-        df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
-        df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
+        df.pickup_datetime = pd.to_datetime(df.pickup_datetime)
+        df.dropoff_datetime = pd.to_datetime(df.dropoff_datetime)
 
         df.to_sql(name=table_name, con=engine, if_exists='append')
 

@@ -13,13 +13,20 @@ import pyarrow.parquet as pq
 
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
 BUCKET = os.environ.get("GCP_GCS_BUCKET")
+# PROJECT_ID = 'savvy-octagon-362900'
+# BUCKET = 'dtc_data_lake_ny_taxi_manhdo'
 
-dataset_file = "yellow_tripdata_2021-01.csv"
-dataset_url = f"https://s3.amazonaws.com/nyc-tlc/trip+data/{dataset_file}"
-path_to_local_home = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
+dataset_file = "bq-results-20220927-084015-1664268030716.csv"
+
+
+# path_to_local_home = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 parquet_file = dataset_file.replace('.csv', '.parquet')
-BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'trips_data_all')
+BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'trips_data_all1')
 
+URL = "https://drive.google.com/uc?id=1JBQhTet0LEe3yg2guY-vWF88yhqVI8Kt&export=download"
+FILE_NAME = 'bq-results-20220927-084015-1664268030716.csv'
+TABLE_NAME = 'yellow_taxi_trip4'
+AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 
 def format_to_parquet(src_file):
     if not src_file.endswith('.csv'):
@@ -70,14 +77,14 @@ with DAG(
 
     download_dataset_task = BashOperator(
         task_id="download_dataset_task",
-        bash_command=f"curl -sSL {dataset_url} > {path_to_local_home}/{dataset_file}"
+        bash_command='curl -L "{}" > {}/{}'.format(URL, AIRFLOW_HOME, FILE_NAME)
     )
 
     format_to_parquet_task = PythonOperator(
         task_id="format_to_parquet_task",
         python_callable=format_to_parquet,
         op_kwargs={
-            "src_file": f"{path_to_local_home}/{dataset_file}",
+            "src_file": f"{AIRFLOW_HOME}/{FILE_NAME}",
         },
     )
 
@@ -87,8 +94,8 @@ with DAG(
         python_callable=upload_to_gcs,
         op_kwargs={
             "bucket": BUCKET,
-            "object_name": f"raw/{parquet_file}",
-            "local_file": f"{path_to_local_home}/{parquet_file}",
+            "object_name": "{}".format(parquet_file),
+            "local_file": "{}/{}".format(AIRFLOW_HOME, parquet_file),
         },
     )
 
@@ -102,7 +109,7 @@ with DAG(
             },
             "externalDataConfiguration": {
                 "sourceFormat": "PARQUET",
-                "sourceUris": [f"gs://{BUCKET}/raw/{parquet_file}"],
+                "sourceUris": [f"gs://{BUCKET}/{parquet_file}"],
             },
         },
     )
