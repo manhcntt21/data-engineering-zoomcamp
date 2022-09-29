@@ -72,7 +72,6 @@ python -m http.server
     		docker compose up -d
     	docker compose down
 
-
 1.2.6 SQL BASIC
 
 1.3.1 Terraform
@@ -147,3 +146,9 @@ question 2: largest tip for each day
     FROM yellow_taxi_trips
     group by pickup_day
     order by max desc;
+
+Tutorial: https://cloud.google.com/docs/terraform/best-practices-for-terraform
+more: https://github.com/orgs/terraform-google-modules/repositories
+Một số vi dụ luyện tập với terraform từ trang chủ: https://github.com/terraform-google-modules/terraform-docs-samples
+
+Best pratice : https://cloud.google.com/docs/terraform/best-practices-for-terraform
